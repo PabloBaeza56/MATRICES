@@ -28,11 +28,11 @@ int main(int argc, char *argv[]) {
 	puts("1. Suma de Matrices\n");
 	puts("2. Multiplicacion de Matrices por una Escalar\n");
 	puts("3. Multiplicacion de Matrices\n");
-	puts("4. Obtención de Transpuesta de una Matriz\n");
+	puts("4. ObtenciÃ³n de Transpuesta de una Matriz\n");
 	puts("5. Obtencion de la Inversa de una Matriz por Gauss-Jordan\n");
-	puts("6. Solución de Sistema de Ecuaciones por Gauss-Jordan\n");
+	puts("6. SoluciÃ³n de Sistema de Ecuaciones por Gauss-Jordan\n");
 	puts("7. Calcula de Determinante de una Matriz\n");
-	puts("8. Solución de Sistema de Ecuaciones por Cramer");
+	puts("8. SoluciÃ³n de Sistema de Ecuaciones por Cramer");
 	
 	puts("\n");
 	
