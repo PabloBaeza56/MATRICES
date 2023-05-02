@@ -99,7 +99,9 @@ int main(int argc, char *argv[]) {
 	matrizSimetrica(matriz);
 	producto_diagonal_func(matriz);
 	
-	printf("\n");	imprimirTranspuesta(matriz);	
+	printf("\n");
+	imprimirTranspuesta(matriz);
+	
 	
 	/*
 	leer matriz ok
