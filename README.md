@@ -1,15 +1,15 @@
 HITOS:
 
 Los primeros 4 ejercicios ya se encuentran en el archivo calcuMatrices_v1b.c (usando memoria dinamica). FALTA TESTEAR
-
-
-
+.
+.
+.
 PROBLEMA GRAVE: 
 
-EL ARCHIVO DETERMINANTE.C FALLA AL CALCULAR LA DETERMINANTE DE 3 X 3, PERO LA DE 4 X 4 NO HAY PROBLEMA (LLAMA AL METODO 3 X 3)
-
-
-
+El archivo determinante.c falla al calcular la determinante de 3 x 3, pero la de 4 x 4 no hay problema (llama al metodo 3 x 3)
+.
+.
+.
 LISTA DE COSAS POR HACER:
 
 * Impresión paso a paso de las operaciones (todos los ejercicios)
