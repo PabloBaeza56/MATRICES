@@ -1,0 +1,242 @@
+#include <stdio.h>
+#include <math.h>
+#define F 4
+#define C 5 // f+1
+
+// variables reservadas para matrices 3*3 NO MOVER
+#define FO 5
+#define CO 3
+
+/* configuracion para 2*2
+#define F 2
+#define C 3 //f+1
+
+*/
+/* configuracion para 3*3
+#define F 3
+#define C 4 //f+1
+
+*/
+
+/* configuracion para 4*4
+#define F 4
+#define C 5 //f+1
+*/
+void leermatriz(double matriz_operable[F][C]){
+	
+	for (int i = 0; i < F; i++){
+		int caracter = 119;
+		for (int f = 0; f < C; f++){
+			if (f == C -1){
+				printf("Ingrese el resultado de la ecuacion numero %d:  ", i+1);
+			} else {
+				printf("Ingrese el valor %c de la ecuacion numero %d:  ", caracter, i+1);
+			}
+			
+			scanf("%lf", &matriz_operable[i][f]);
+			caracter++;
+		}
+		caracter = 120;
+	}
+}
+
+void imprimirMatriz(double matriz_operable[FO][CO]){
+	for (int i = 0; i < F; i++){
+		for (int f = 0; f < F; f++){
+			printf("%lf    ", matriz_operable[i][f]);
+		}
+		puts("\n");
+	}
+}
+
+double calcular_determinante_orden_dos_x_dos(double matriz_operable[F][C]){
+	double determinante = matriz_operable[0][0] * matriz_operable[1][1] - matriz_operable[0][1] * matriz_operable[1][0];
+	return determinante;
+}
+
+double obterner_incognitas_2_x_2(double matriz_operable[F][C], float determinante_maestro, int fila_a, int fila_b){
+	double matriz_temporal[F][C];
+	for (int i = 0; i < F; i++){
+		matriz_temporal[i][0] = matriz_operable[i][fila_a];
+		matriz_temporal[i][1] = matriz_operable[i][fila_b];
+	}
+	double res = calcular_determinante_orden_dos_x_dos(matriz_temporal) / (float)determinante_maestro;
+	return res;
+}
+
+double calcular_determinante_orden_tres_x_tres(double matriz_operable[FO][CO]){
+	double contador_total = 0;
+	double contador;
+	
+	// ida
+	int inicio_fila_imaginario = 0;
+	contador = 0;
+	for (int f = 0; f < CO; f++){
+		double multiplicador = 1;
+		for (int i = 0; i < CO; i++){
+			multiplicador *= matriz_operable[inicio_fila_imaginario][i];
+			inicio_fila_imaginario++;
+		}
+		inicio_fila_imaginario -= 2;
+		contador += multiplicador;
+	}
+	contador_total += contador;
+	
+	// vuelta
+	inicio_fila_imaginario = 0;
+	contador = 0;
+	for (int f = 0; f < CO; f++){
+		double multiplicador = -1;
+		for (int i = CO - 1; i >= 0; i--){
+			multiplicador *= matriz_operable[inicio_fila_imaginario][i];
+			inicio_fila_imaginario++;
+		}
+		inicio_fila_imaginario -= 2;
+		contador += multiplicador;
+	}
+	contador_total += contador;
+	return contador_total;
+}
+
+void copiar_filas(int fila_a_tomar, int fila_a_copiar, double matriz_operable[FO][CO]){
+	for (int i = 0; i < CO; i++){
+		matriz_operable[fila_a_copiar][i] = matriz_operable[fila_a_tomar][i];
+	}
+}
+
+void restaurar_matriz(double matriz_operable[F][C], double matriz_operable_reducida[FO][CO]){
+	for (int i = 0; i < F; i++){
+		for (int f = 0; f < C; f++){
+			matriz_operable_reducida[i][f] = matriz_operable[i][f];
+		}
+	}
+	copiar_filas(0, 3, matriz_operable_reducida);
+	copiar_filas(1, 4, matriz_operable_reducida);
+}
+
+
+
+void obtener_incognitas_3_X_3(double matriz_operable[F][C]){
+	double matriz_operable_reducida[FO][CO];
+	restaurar_matriz(matriz_operable, matriz_operable_reducida);
+	
+	float determinante_maestro = calcular_determinante_orden_tres_x_tres(matriz_operable_reducida);
+	
+	int caracter = 120;
+	for (int t = 0; t < CO; t++){
+		restaurar_matriz(matriz_operable, matriz_operable_reducida);
+		for (int i = 0; i < CO; i++){
+			matriz_operable_reducida[i][t] = matriz_operable[i][3];
+		}
+		copiar_filas(0, 3, matriz_operable_reducida);
+		copiar_filas(1, 4, matriz_operable_reducida);
+		
+		double determinante_res = (calcular_determinante_orden_tres_x_tres(matriz_operable_reducida)) / (float)determinante_maestro;
+		
+		printf("%f %c\n", determinante_res, caracter);
+		caracter++;
+	}
+}
+	
+void simplificacion_calculo_incognitas_2_x_2(double matriz_operable[F][C]){
+	double determinante_maestro = calcular_determinante_orden_dos_x_dos(matriz_operable);
+	printf("%f  X\n", obterner_incognitas_2_x_2(matriz_operable, determinante_maestro, 2, 1));
+	printf("%f  Y\n", obterner_incognitas_2_x_2(matriz_operable, determinante_maestro, 0, 2));
+}
+
+void confirmacion_de_continuar(double matriz_operable[F][C]){//adapatar a todos los casos 2*2 3*3 4*4
+	printf("La ecuacion se veria de la siguiente manera, deseas continuar: \n");
+	
+	int f = 0;
+	for (int i = 0; i < F; i++){
+		printf("(%lf x) + (%lf y) = %lf", matriz_operable[i][f], matriz_operable[i][f+1], matriz_operable[i][f+2]);
+		puts("\n");
+	}
+}
+	
+	double calcular_determinante_orden_cuatro_x_cuatro(double matriz_operable[F][F]){
+		
+		double contador_total = 0;
+		double resultado_final = 0;
+		double matriz_temporal[FO][CO];
+		
+		for (int h = 0; h < F; h++){
+			
+			double valor_operable = matriz_operable[0][h];
+			int indice_fila_real = 0;
+			
+			int indice_fila_importante = 1;
+			int indice_columna_importante = h + 1;
+			int exponente_importante = indice_fila_importante + indice_columna_importante;
+			
+			for (int i = 1; i < F; i++){
+				int indice_columna_real = -1;
+				for (int j = 0; j < F; j++){
+					if (j != h){
+						indice_columna_real++;
+						matriz_temporal[indice_fila_real][indice_columna_real] = matriz_operable[i][j];
+					}
+				}
+				indice_fila_real++;
+			}
+			
+			copiar_filas(0, 3, matriz_temporal);
+			copiar_filas(1, 4, matriz_temporal);
+			contador_total = calcular_determinante_orden_tres_x_tres(matriz_temporal);
+			int primer_multiplicable = (pow(-1, exponente_importante));
+			resultado_final = resultado_final + (primer_multiplicable * valor_operable * contador_total);
+		}
+		return resultado_final;
+	}
+		
+	void imprimirMatriz_2(double matriz_operable[F][F]){
+		for (int i = 0; i < F; i++){
+			for (int f = 0; f < F; f++){
+				printf("%lf    ", matriz_operable[i][f]);//filas y columnas
+			}
+			puts("\n");
+		}
+	}
+	
+	void obtener_incognitas_4_X_4(double matriz_operable[F][C]){
+		double matriz_operable_reducida[F][F];
+		for (int i = 0; i < F; i++){
+			for (int f = 0; f < F; f++){
+				matriz_operable_reducida[i][f] = matriz_operable[i][f];
+			}
+		}
+		float determinante_maestro = calcular_determinante_orden_cuatro_x_cuatro(matriz_operable_reducida);
+		
+		for (int t = 0; t < F; t++){
+			for (int i = 0; i < F; i++){
+				for (int f = 0; f < F; f++){
+					matriz_operable_reducida[i][f] = matriz_operable[i][f];
+				}
+			}
+			//imprimirMatriz_2(matriz_operable_reducida);
+			
+			for (int i = 0; i < F; i++){
+				matriz_operable_reducida[i][t] = matriz_operable[i][F];
+			}
+			
+			double determinante_res = (calcular_determinante_orden_cuatro_x_cuatro(matriz_operable_reducida)) / (float)determinante_maestro;
+			printf("%f xxxx\n", determinante_res);
+		}
+	}	
+
+int main(int argc, char *argv[])
+{
+	double matriz_operable[F][C];
+	
+	leermatriz(matriz_operable);
+	puts("\n");
+	confirmacion_de_continuar(matriz_operable);
+	
+	obtener_incognitas_4_X_4(matriz_operable);
+	//simplificacion_calculo_incognitas_2_x_2(matriz_operable);
+	//obtener_incognitas_3_X_3(matriz_operable);
+	
+
+	
+	return 0;
+}
