@@ -12,6 +12,8 @@ EL ARCHIVO DETERMINANTE.C FALLA AL CALCULAR LA DETERMINANTE DE 3 X 3, PERO LA DE
 
 LISTA DE COSAS POR HACER:
 
+* Funcion que muestra como se analizaria la ecuacion en el programa, ejemplo en compliacion crawler.
+* Lectura de matrices que se muestre llena de 0s y conforme el usuario tecle se va llenando (Avance Ian)
 * Impresión paso a paso de las operaciones (todos los ejercicios)
 * Agregar memoria dinámica a los últimos 4 ejercicios (usar de ejemplo calcumatrices_v1b.c)
 * Agregar validación de entrada numérica a los últimos 4 ejercicios (usar de ejemplo calcumatrices_v1b.c)
