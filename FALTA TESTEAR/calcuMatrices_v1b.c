@@ -125,17 +125,24 @@ void liberarMemoria(float **matriz, dimensiones medidas){
 }
 void leerMatriz(float **matriz, dimensiones medidas){
 	float num;
+	int i, j;
 	
-	for(int i=0; i<medidas.filas; i++){
-		for (int j=0;j<medidas.columnas; j++){
+	for(i=0; i<medidas.filas; i++){
+		for(j=0; j<medidas.columnas; j++){
+			matriz[i][j]=0;
+		}
+	}
+	
+	for(i=0; i<medidas.filas; i++){
+		for (j=0;j<medidas.columnas; j++){
 			printf("\nIngrese el valor [%d][%d]: ", i, j);
 			while (scanf("%f",&num)!=1||getchar()!='\n'){
 				printf("Entrada invalida. Ingrese un numero: ");
 				fflush(stdin);
 			}
 			matriz[i][j]=num;
-			for(int a=0; a<=i; a++){
-				for(int b=0; b<=j; b++){
+			for(int a=0; a<medidas.filas; a++){
+				for(int b=0; b<medidas.columnas; b++){
 					printf("%.2f    ", matriz[a][b]);
 				}
 				puts("\n");
