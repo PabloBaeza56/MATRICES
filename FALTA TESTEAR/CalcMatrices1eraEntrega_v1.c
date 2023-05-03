@@ -39,11 +39,11 @@ int main(int argc, char *argv[]) {
 	puts("1. Suma de Matrices\n");
 	puts("2. Multiplicacion de Matrices por una Escalar\n");
 	puts("3. Multiplicacion de Matrices\n");
-	puts("4. Obtención de Transpuesta de una Matriz\n");
+	puts("4. ObtenciÃ³n de Transpuesta de una Matriz\n");
 	puts("5. Obtencion de la Inversa de una Matriz por Gauss-Jordan\n");
-	puts("6. Solución de Sistema de Ecuaciones por Gauss-Jordan\n");
+	puts("6. SoluciÃ³n de Sistema de Ecuaciones por Gauss-Jordan\n");
 	puts("7. Calcula de Determinante de una Matriz\n");
-	puts("8. Solución de Sistema de Ecuaciones por Cramer");
+	puts("8. SoluciÃ³n de Sistema de Ecuaciones por Cramer");
 	
 	puts("\n");
 	
@@ -96,7 +96,7 @@ dimensiones leerDimensiones(){
 		}
 		medidas.columnas=col;
 		if(medidas.filas>4 || medidas.columnas>4){
-			puts("Tamaño maximo de matrices: 4x4");
+			puts("TamaÃ±o maximo de matrices: 4x4");
 		}
 		if(medidas.filas<1 || medidas.columnas<1){
 			puts("Entrada/s invalida. Ingrese numeros positivo:");
@@ -377,7 +377,7 @@ void inversaGaussJordan(){
 			puts("Ingrese una matriz cuadrada");
 		}
 		if(medidas.filas==1 || medidas.columnas==1){
-			puts("Tamaño minimo de matriz: 2x2");
+			puts("TamaÃ±o minimo de matriz: 2x2");
 		}
 	} while(medidas.filas!=medidas.columnas && (medidas.filas<=1 || medidas.columnas<=1));
 	
