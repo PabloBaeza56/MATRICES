@@ -31,10 +31,16 @@ void imprimirMatriz_matraca_asendente(float**, dimensiones);
 void corregir_0_negativo(float**, dimensiones);
 void redondeo_milesimal(float**, dimensiones);
 
-void sistemaEcuacionesCramer();
-//leerDimensiones
-double** inicializarMatrizCramer(dimensiones);
+void sistemaEcuacionesGaussJordan();
+void imprimirEcuacionGaussJordan(float**, dimensiones);
+void leerEcuacionesGaussJordan(float**, dimensiones);
+
+void calcularDeterminante();
 void leerMatrizCramer(double**, dimensiones);
+
+void sistemaEcuacionesCramer();
+double** inicializarMatrizCramer(dimensiones);
+void leerEcuacionCramer(double**, dimensiones);
 void imprimirEcuacionCramer(double**, dimensiones);
 double calcular_determinante_orden_tres_x_tres(double**, dimensiones); //Matriz FOK/COK
 void copiar_filas_rellenar_matriz_3_x_3(int fila_a_tomar, int fila_a_copiar, double**, dimensiones); //Matriz FOK/COK
@@ -106,10 +112,16 @@ int main(int argc, char *argv[]) {
 			system("cls"); 
 			break;
 		case 6:
-			
+			sistemaEcuacionesGaussJordan();
+			puts("Desea continuar? (y/n)");
+			scanf("%c", &continuar);
+			system("cls"); 
 			break;
 		case 7:
-			
+			calcularDeterminante();
+			puts("Desea continuar? (y/n)");
+			scanf("%c", &continuar);
+			system("cls");
 			break;
 		case 8:
 			sistemaEcuacionesCramer();
@@ -120,7 +132,10 @@ int main(int argc, char *argv[]) {
 		}
 	} while(continuar!='n');
 	
-	
+	puts("Creado por:\n");
+	puts("Pablo Baeza\n");
+	puts("Mariana Caballero\n");
+	puts("Ian Rodriguez");
 	
 	return 0;
 }
@@ -620,7 +635,7 @@ void sistemaEcuacionesCramer(){
 	puts("\n");
 	
 	matriz=inicializarMatrizCramer(medidas);
-	leerMatrizCramer(matriz, medidas);
+	leerEcuacionCramer(matriz, medidas);
 	puts("\n");
 	imprimirEcuacionCramer(matriz, medidas);
 	
@@ -648,7 +663,7 @@ double** inicializarMatrizCramer(dimensiones medidas){
 	
 	return matriz;
 }
-void leerMatrizCramer(double** matriz, dimensiones medidas){
+void leerEcuacionCramer(double** matriz, dimensiones medidas){
 	float num;
 	int i, j;
 	
@@ -901,4 +916,178 @@ void copiar_datos_para_otra_matriz_4_x_4(double** matriz_operable, dimensiones m
 			matriz_operable_reducida[i][f] = matriz_operable[i][f];
 		}
 	}
+}
+void sistemaEcuacionesGaussJordan(){
+	float** matriz;
+	dimensiones medidas;
+	
+	puts("Sistema de Ecuaciones por Gauss Jordan\n");
+	
+	medidas=leerDimensionesCuadradas();
+	while(medidas.filas==1){
+		if(medidas.filas==1){
+			puts("Tamaño minimo es de 2");
+		}
+		medidas=leerDimensionesCuadradas();
+	}
+	medidas.columnas++;
+	
+	puts("\n");
+	
+	matriz=inicializarMatriz(medidas);
+	leerEcuacionesGaussJordan(matriz, medidas);
+	puts("\n");
+	imprimirEcuacionGaussJordan(matriz, medidas);
+	
+	imprimirMatriz_matraca_desendente(matriz, medidas);
+	imprimirMatriz_matraca_asendente(matriz, medidas);
+	corregir_0_negativo(matriz, medidas);
+	redondeo_milesimal(matriz, medidas);
+	
+	puts("\n");
+	
+	puts("Matriz final:");
+	imprimirMatriz(matriz, medidas);
+	
+	puts("\n");
+	
+	int j=0;
+	for(int i=0; i<medidas.filas; i++){
+		printf("%f %c\n", matriz[i][medidas.columnas-1], 87+j);
+		j++;
+	}
+}
+void imprimirEcuacionGaussJordan(float** matriz, dimensiones medidas){
+	puts("El sistema de ecuaciones se veria de la siguiente forma:");
+	puts("\n");
+	for(int i=0; i<medidas.filas; i++){
+		for(int j=0; j<medidas.columnas; j++){
+			if(j==medidas.columnas-1){
+				printf("%.2f", matriz[i][j]); 
+			}else{
+				if(j==medidas.columnas-2){
+					printf("%.2f %c = ", matriz[i][j], 65+j);
+				}else{
+					printf("%.2f %c + ", matriz[i][j], 65+j);
+				}
+			}
+		}
+		puts("\n");
+	}
+}
+void leerEcuacionesGaussJordan(float** matriz, dimensiones medidas){
+	float num;
+	int i, j;
+	
+	for(i=0; i<medidas.filas; i++){
+		for(j=0; j<medidas.columnas; j++){
+			matriz[i][j]=0;
+		}
+	}
+	
+	for(i=0; i<medidas.filas; i++){
+		for (j=0;j<medidas.columnas; j++){
+			if(j==medidas.columnas-1){
+				printf("Ingrese el resultado de la ecuacion %d: ", i+1);
+				while (scanf("%f",&num)!=1||getchar()!='\n'){
+					printf("Entrada invalida. Ingrese un numero: ");
+					fflush(stdin);
+				}
+			}else{
+				printf("\nIngrese el coeficiente de %c, de la ecuacion %d: ", 65+j, i+1);
+				while (scanf("%f",&num)!=1||getchar()!='\n'){
+					printf("Entrada invalida. Ingrese un numero: ");
+					fflush(stdin);
+				}
+			}
+			matriz[i][j]=num;
+			for(int a=0; a<medidas.filas; a++){
+				for(int b=0; b<medidas.columnas; b++){
+					printf("%.2f    ", matriz[a][b]);
+				}
+				puts("\n");
+			}
+		}
+	}
+	
+	puts("\n");
+	
+	return;	
+}
+void calcularDeterminante(){
+	double **matriz;
+	dimensiones medidas;
+	double determinante;
+	
+	dimensiones medidasReducidas;
+	medidasReducidas.filas=5;
+	medidasReducidas.columnas=3;
+	
+	double** matriz_operable_reducida;
+	matriz_operable_reducida=inicializarMatrizCramer(medidasReducidas);
+	
+	puts("Calculo de Determinante de una Matriz\n");
+	
+	medidas=leerDimensionesCuadradas();
+	while(medidas.filas==1 || medidas.filas>4){
+		if(medidas.filas==1){
+			puts("Tamaño minimo es de 2");
+		}
+		if(medidas.filas>4){
+			puts("Tamaño maximo es de 4");
+		}
+		medidas=leerDimensionesCuadradas();
+	}
+	
+	puts("\n");
+	
+	matriz=inicializarMatrizCramer(medidas);
+	leerMatrizCramer(matriz, medidas);
+	puts("\n");
+	
+	switch(medidas.filas){
+	case 2:
+		determinante=calcular_determinante_orden_dos_x_dos(matriz, medidas);
+		printf("El determinante de la matriz es de: %lf\n", determinante);
+		break;
+	case 3:
+		restaurar_matriz_3_x_3(matriz, medidas, matriz_operable_reducida, medidasReducidas);
+		determinante=calcular_determinante_orden_tres_x_tres(matriz_operable_reducida, medidasReducidas);
+		printf("El determinante de la matriz es de: %lf\n", determinante);
+		break;
+	case 4:
+		determinante=calcular_determinante_orden_cuatro_x_cuatro(matriz, medidas);
+		printf("El determinante de la matriz es de: %lf\n", determinante);
+		break;
+	}
+	
+}
+void leerMatrizCramer(double** matriz, dimensiones medidas){
+	float num;
+	int i, j;
+	
+	for(i=0; i<medidas.filas; i++){
+		for(j=0; j<medidas.columnas; j++){
+			matriz[i][j]=0;
+		}
+	}
+	
+	for(i=0; i<medidas.filas; i++){
+		for (j=0;j<medidas.columnas; j++){
+			printf("\nIngrese el valor [%d][%d]: ", i, j);
+			while (scanf("%f",&num)!=1||getchar()!='\n'){
+				printf("Entrada invalida. Ingrese un numero: ");
+				fflush(stdin);
+			}
+			matriz[i][j]=num;
+			for(int a=0; a<medidas.filas; a++){
+				for(int b=0; b<medidas.columnas; b++){
+					printf("%.2f    ", matriz[a][b]);
+				}
+				puts("\n");
+			}
+		}
+	}
+	
+	return;
 }
