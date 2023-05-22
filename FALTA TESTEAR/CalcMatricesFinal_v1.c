@@ -623,10 +623,10 @@ void sistemaEcuacionesCramer(){
 	medidas=leerDimensionesCuadradas();
 	while(medidas.filas==1 || medidas.filas>4){
 		if(medidas.filas==1){
-			puts("Tamaño minimo es de 2");
+			puts("TamaÃ±o minimo es de 2");
 		}
 		if(medidas.filas>4){
-			puts("Tamaño maximo es de 4");
+			puts("TamaÃ±o maximo es de 4");
 		}
 		medidas=leerDimensionesCuadradas();
 	}
@@ -926,7 +926,7 @@ void sistemaEcuacionesGaussJordan(){
 	medidas=leerDimensionesCuadradas();
 	while(medidas.filas==1){
 		if(medidas.filas==1){
-			puts("Tamaño minimo es de 2");
+			puts("TamaÃ±o minimo es de 2");
 		}
 		medidas=leerDimensionesCuadradas();
 	}
@@ -1031,10 +1031,10 @@ void calcularDeterminante(){
 	medidas=leerDimensionesCuadradas();
 	while(medidas.filas==1 || medidas.filas>4){
 		if(medidas.filas==1){
-			puts("Tamaño minimo es de 2");
+			puts("TamaÃ±o minimo es de 2");
 		}
 		if(medidas.filas>4){
-			puts("Tamaño maximo es de 4");
+			puts("TamaÃ±o maximo es de 4");
 		}
 		medidas=leerDimensionesCuadradas();
 	}
