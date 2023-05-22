@@ -24,12 +24,19 @@ void multiplicacionMatrices();
 
 void inversaGaussJordan();
 void leerMatrizGaussJordan(float**, dimensiones);
+float validacionDeterminante(float**, dimensiones);
 void operar_matriz_con_pivotes(float**, int, int, float, dimensiones);
 void operar_matriz_estocada_final(float**, int, float, dimensiones);
 void imprimirMatriz_matraca_desendente(float**, dimensiones);
 void imprimirMatriz_matraca_asendente(float**, dimensiones);
 void corregir_0_negativo(float**, dimensiones);
 void redondeo_milesimal(float**, dimensiones);
+
+float determiannte_2x2(float**, dimensiones);
+float determinante_3x3(float**, dimensiones);
+float determinante_4x4(float**, dimensiones);
+void restaurarMatriz_3x3(float**, dimensiones, float**, dimensiones);
+void copiarFilas_3x3(int fila_a_tomar, int fila_a_copiar, float**, dimensiones);
 
 void sistemaEcuacionesGaussJordan();
 void imprimirEcuacionGaussJordan(float**, dimensiones);
@@ -83,49 +90,49 @@ int main(int argc, char *argv[]) {
 		switch(opcion){
 		case 1:
 			sumarMatrices();
-			puts("Desea continuar? (y/n)");
+			puts("Desea realizar otra operacion? (y/n)");
 			scanf("%c", &continuar);
 			system("cls"); 
 			break;
 		case 2:
 			multiplicacionEscalar();
-			puts("Desea continuar? (y/n)");
+			puts("Desea realizar otra operacion? (y/n)");
 			scanf("%c", &continuar);
 			system("cls"); 
 			break;
 		case 3:
 			multiplicacionMatrices();
-			puts("Desea continuar? (y/n)");
+			puts("Desea realizar otra operacion? (y/n)");
 			scanf("%c", &continuar);
 			system("cls"); 
 			break;
 		case 4:
 			matrizTranspuesta();
-			puts("Desea continuar? (y/n)");
+			puts("Desea realizar otra operacion? (y/n)");
 			scanf("%c", &continuar);
 			system("cls"); 
 			break;
 		case 5:
 			inversaGaussJordan();
-			puts("Desea continuar? (y/n)");
+			puts("Desea realizar otra operacion? (y/n)");
 			scanf("%c", &continuar);
 			system("cls"); 
 			break;
 		case 6:
 			sistemaEcuacionesGaussJordan();
-			puts("Desea continuar? (y/n)");
+			puts("Desea realizar otra operacion? (y/n)");
 			scanf("%c", &continuar);
 			system("cls"); 
 			break;
 		case 7:
 			calcularDeterminante();
-			puts("Desea continuar? (y/n)");
+			puts("Desea realizar otra operacion? (y/n)");
 			scanf("%c", &continuar);
 			system("cls");
 			break;
 		case 8:
 			sistemaEcuacionesCramer();
-			puts("Desea continuar? (y/n)");
+			puts("Desea realizar otra operacion? (y/n)");
 			scanf("%c", &continuar);
 			system("cls"); 
 			break;
@@ -470,27 +477,44 @@ void multiplicacionMatrices(){
 void inversaGaussJordan(){
 	float **matriz;
 	dimensiones medidas;
+	float determinante;
 	
 	puts("Inversa de una Matriz por Gauss Jordan\n");
 	
 	medidas=leerDimensionesCuadradas();
+	while(medidas.filas==1 || medidas.filas>4){
+		if(medidas.filas==1){
+			puts("Tamaño minimo es de 2");
+		}
+		if(medidas.filas>4){
+			puts("Tamaño maximo es de 4");
+		}
+		medidas=leerDimensionesCuadradas();
+	}
 	medidas.columnas=medidas.filas*2;
 	
 	puts("\n");
 	
 	matriz=inicializarMatriz(medidas);
 	leerMatrizGaussJordan(matriz, medidas);
-	puts("\n");
-	puts("Matriz aumentada");
-	imprimirMatriz(matriz, medidas);
 	
-	imprimirMatriz_matraca_desendente(matriz, medidas);
-	imprimirMatriz_matraca_asendente(matriz, medidas);
-	redondeo_milesimal(matriz, medidas);
-	corregir_0_negativo(matriz, medidas);
 	puts("\n");
-	puts("Inversa de matriz");
-	imprimirMatriz(matriz, medidas);
+	
+	determinante = validacionDeterminante(matriz, medidas);
+	if(determinante == 0){
+		puts("Determinante de matriz: 0. La matriz ingresada no tiene inversa");
+	}else{
+		puts("Matriz aumentada");
+		imprimirMatriz(matriz, medidas);
+		
+		imprimirMatriz_matraca_desendente(matriz, medidas);
+		imprimirMatriz_matraca_asendente(matriz, medidas);
+		redondeo_milesimal(matriz, medidas);
+		corregir_0_negativo(matriz, medidas);
+		puts("\n");
+		puts("Inversa de matriz");
+		imprimirMatriz(matriz, medidas);
+	}
 	
 	return;
 }
@@ -623,10 +647,10 @@ void sistemaEcuacionesCramer(){
 	medidas=leerDimensionesCuadradas();
 	while(medidas.filas==1 || medidas.filas>4){
 		if(medidas.filas==1){
-			puts("TamaÃ±o minimo es de 2");
+			puts("Tamaño minimo es de 2");
 		}
 		if(medidas.filas>4){
-			puts("TamaÃ±o maximo es de 4");
+			puts("Tamaño maximo es de 4");
 		}
 		medidas=leerDimensionesCuadradas();
 	}
@@ -926,7 +950,7 @@ void sistemaEcuacionesGaussJordan(){
 	medidas=leerDimensionesCuadradas();
 	while(medidas.filas==1){
 		if(medidas.filas==1){
-			puts("TamaÃ±o minimo es de 2");
+			puts("Tamaño minimo es de 2");
 		}
 		medidas=leerDimensionesCuadradas();
 	}
@@ -1031,10 +1055,10 @@ void calcularDeterminante(){
 	medidas=leerDimensionesCuadradas();
 	while(medidas.filas==1 || medidas.filas>4){
 		if(medidas.filas==1){
-			puts("TamaÃ±o minimo es de 2");
+			puts("Tamaño minimo es de 2");
 		}
 		if(medidas.filas>4){
-			puts("TamaÃ±o maximo es de 4");
+			puts("Tamaño maximo es de 4");
 		}
 		medidas=leerDimensionesCuadradas();
 	}
@@ -1090,4 +1114,131 @@ void leerMatrizCramer(double** matriz, dimensiones medidas){
 	}
 	
 	return;
+}
+float validacionDeterminante(float** matriz, dimensiones medidas){
+	float determinante;
+	
+	dimensiones medidasReducidas;
+	medidasReducidas.filas=5;
+	medidasReducidas.columnas=3;
+	
+	float** matriz_operable_reducida;
+	matriz_operable_reducida=inicializarMatriz(medidasReducidas);
+	
+	switch(medidas.filas){
+	case 2:
+		determinante=determiannte_2x2(matriz, medidas);
+		break;
+	case 3:
+		restaurarMatriz_3x3(matriz, medidas, matriz_operable_reducida, medidasReducidas);
+		determinante=determinante_3x3(matriz_operable_reducida, medidasReducidas);
+		break;
+	case 4:
+		determinante=determinante_4x4(matriz, medidas);
+		break;
+	}
+	
+	return determinante;
+}
+float determiannte_2x2(float** matriz, dimensiones medidas){
+	float determinante = matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0];
+	return determinante;
+}
+float determinante_3x3(float** matriz, dimensiones medidasReducidas){
+	float resultado_determinante = 0;
+	
+	
+	/*  ida  \     */
+	int fila_de_inicio = 0;
+	double contador_ida = 0;
+	
+	for (int recorer_columnas_global = 0; recorer_columnas_global < medidasReducidas.columnas; recorer_columnas_global++){
+		double multiplicador = 1;
+		for (int columna_recorrida = 0 ; columna_recorrida < medidasReducidas.columnas; columna_recorrida++){
+			multiplicador *= matriz[fila_de_inicio][columna_recorrida];
+			fila_de_inicio++;
+		}
+		fila_de_inicio = fila_de_inicio - 2;
+		contador_ida += multiplicador;
+	}
+	resultado_determinante += contador_ida;
+	
+	
+	/*  vuelta  /    */
+	fila_de_inicio = 0;
+	int contador_vuelta = 0;
+	for (int recorer_columnas_global = 0; recorer_columnas_global < medidasReducidas.columnas; recorer_columnas_global++){
+		double multiplicador = -1;
+		for (int columna_recorrida = medidasReducidas.columnas-1 ; columna_recorrida >= 0; columna_recorrida--){
+			multiplicador *= matriz[fila_de_inicio][columna_recorrida];
+			fila_de_inicio++;
+		}
+		fila_de_inicio = fila_de_inicio - 2;
+		contador_vuelta += multiplicador;
+	}
+	resultado_determinante += contador_vuelta;
+	
+	
+	return resultado_determinante;
+}
+float determinante_4x4(float** matriz_operable, dimensiones medidasReducidas){
+	dimensiones medidasTemporales;
+	medidasTemporales.filas=5;
+	medidasTemporales.columnas=3;
+	
+	float** matriz_temporal;
+	matriz_temporal=inicializarMatriz(medidasTemporales);
+	
+	float resultado_final = 0;
+	
+	
+	for (int indice_columna_global = 0; indice_columna_global < medidasReducidas.filas; indice_columna_global++){
+		
+		int indice_fila = 0;
+		
+		//------- Esta seccion "recorta la matriz " para volverla  3 * 3---------------------- 
+		// LA FILA 0 EN LA MATRIZ ES LA ANCLADA, LAS COLUMNAS SON LAS QUE ITERAN
+		for (int indice_fila_limitada = 1; indice_fila_limitada < medidasReducidas.filas; indice_fila_limitada++){
+			int indice_columna = -1;
+			for (int indice_columna_limitada = 0; indice_columna_limitada < medidasReducidas.filas; indice_columna_limitada++){
+				if (indice_columna_limitada != indice_columna_global){
+					indice_columna++;
+					matriz_temporal[indice_fila][indice_columna] = matriz_operable[indice_fila_limitada][indice_columna_limitada];
+				}
+			}
+			indice_fila++;
+		}
+		copiarFilas_3x3(0, 3,matriz_temporal, medidasTemporales);
+		copiarFilas_3x3(1, 4,matriz_temporal, medidasTemporales);
+		//----------------------------------------------------------------
+		
+		
+		
+		int indice_fila_i = 1;
+		int indice_columna_j = indice_columna_global + 1;
+		int primer_valor_multiplicable = (pow(-1, indice_fila_i + indice_columna_j));
+		
+		double valor_a_trabajar_interseccion = matriz_operable[0][indice_columna_global];
+		
+		double determinante_orden_tres_x_tres = determinante_3x3(matriz_temporal, medidasTemporales);
+		
+		resultado_final += ( primer_valor_multiplicable * valor_a_trabajar_interseccion * determinante_orden_tres_x_tres );
+	}
+	
+	return resultado_final;
+}
+void restaurarMatriz_3x3(float** matriz, dimensiones medidas, float** matriz_operable_reducida, dimensiones medidasReducidas){
+	for (int i = 0; i<medidas.filas ; i++){
+		for (int f = 0; f<medidas.filas ; f++){
+			matriz_operable_reducida[i][f] = matriz[i][f];
+		}
+	}
+	
+	copiarFilas_3x3(0, 3, matriz_operable_reducida, medidasReducidas);
+	copiarFilas_3x3(1, 4, matriz_operable_reducida, medidasReducidas);
+}
+void copiarFilas_3x3(int fila_a_tomar, int fila_a_copiar, float** matriz, dimensiones medidasReducidas){
+	for (int i = 0; i < medidasReducidas.columnas; i++){
+		matriz[fila_a_copiar][i] = matriz[fila_a_tomar][i]; 
+	}
 }
