@@ -781,6 +781,8 @@ void simplificacion_obtener_incognitas_2_x_2(double** matriz, dimensiones medida
 		puts("\nDeterminante principal: 0. La ecuacion no tiene solucion\n");
 	}else{
 		printf("%f  w\n", obterner_incognitas_2_x_2(matriz, medidas, determinante_maestro, 2 , 1));
+		puts("\nPresiones enter para continuar\n");
+		char continuar=getchar();
 		printf("%f  x\n", obterner_incognitas_2_x_2(matriz, medidas, determinante_maestro, 0 , 2));
 	}
 }
@@ -852,6 +854,8 @@ void obtener_incognitas_3_X_3(double** matriz, dimensiones medidas){
 			printf("\n%.2lf / %.2f = %.2lf\n", determinante3x3, (float)determinante_3_x_3_matriz_original, determinante_res);
 			printf("%f %c\n", determinante_res, 87+j);
 			j++;
+			puts("\nPresiones enter para continuar\n");
+			char continuar=getchar();
 		}
 	}
 	
@@ -939,6 +943,7 @@ void sustituir_columna_a_trabajar_por_columna_coeficientes_3_y_4(double** matriz
 	}
 }
 void obtener_incognitas_4_X_4(double** matriz, dimensiones medidas){
+	
 	dimensiones medidasReducidas;
 	medidasReducidas.filas=medidas.filas;
 	medidasReducidas.columnas=medidas.filas;
@@ -973,6 +978,8 @@ void obtener_incognitas_4_X_4(double** matriz, dimensiones medidas){
 			printf("\n%.2lf / %.2f = %.2lf\n", determinante4x4, (float)determinante_4_x_4_matriz_original, resultado_incognita);
 			printf("%f %c \n", resultado_incognita, 87+j);
 			j++;
+			puts("\nPresiones enter para continuar\n");
+			char continuar=getchar();
 		}
 	}
 	
